@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::prefix('payments')->group(function () {
+        Route::get('/', [PaymentsController::class, 'index']);
         Route::post('/pay', [PaymentsController::class, 'pay']);
     });
 

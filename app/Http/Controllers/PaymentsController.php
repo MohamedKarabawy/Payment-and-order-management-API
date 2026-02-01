@@ -12,6 +12,8 @@ use App\Models\Payment;
 use App\Models\PaymentGateway;
 use App\Pipelines\PreventUnconfirmedOrderPayment;
 use DB;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Pipeline\Pipeline;
 
 class PaymentsController extends Controller
@@ -19,7 +21,14 @@ class PaymentsController extends Controller
     public function __construct(private PaymentMethodResolver $resolver)
     {}
 
-    public function pay(PaymentRequest $request)
+    public function index(): AnonymousResourceCollection
+    {
+        $payment = Payment::query()->paginate(10);
+
+        return PaymentResource::collection($payment);
+    }
+
+    public function pay(PaymentRequest $request): JsonResponse
     {
         $data = $request->validated();
 
